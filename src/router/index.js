@@ -170,73 +170,37 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/core/goldData',
+    path: '/core/gold/data',
     component: Layout,
-    redirect: '/core/goldData/list',
-    name: 'goldData',
+    redirect: '/core/gold/data',
+    name: 'GoldDailyData',
     meta: {title: '数据', icon: 'el-icon-s-marketing'},
     alwaysShow: true,
     children: [
       {
-        path: 'list',
+        path: '/daily_data',
         name: 'goldDataList',
-        component: () => import('@/views/core/goldData/list'),
+        component: () => import('@/views/core/gold/data/GoldDailyData'),
         meta: {title: '黄金价格'}
       },
       {
-        path: 'nonFarm',
-        name: 'nonFarmList',
-        component: () => import('@/views/core/goldData/nonFarm'),
-        meta: {title: '非农数据'}
-      }
+        path: '/monthly_data',
+        name: 'goldMonthlyList',
+        component: () => import('@/views/core/gold/data/GoldMonthlyData'),
+        meta: {title: '黄金月报'},
+        hidden:true
+      },
+      {
+        path: '/yearly_data',
+        name: 'goldYearlyList',
+        component: () => import('@/views/core/gold/data/GoldYearlyData'),
+        meta: {title: '黄金年报'},
+        hidden:true
+      },
+    ]
+  },
 
-    ]
-  },
-  {
-    path: '/core/goldCharts',
-    component: Layout,
-    redirect: '/core/goldCharts/charts',
-    name: 'goldCharts',
-    meta: {title: '图表', icon: 'el-icon-s-marketing'},
-    alwaysShow: true,
-    children: [
-      {
-        path: 'yearly_frequency',
-        name: 'goldChartsList',
-        component: () => import('@/views/core/goldCharts/yearly_frequency'),
-        meta: {title: '年趋势'}
-      },
-      {
-        path: 'yearly_average',
-        name: 'goldChartAvg',
-        component: () => import('@/views/core/goldCharts/yearly_average'),
-        meta: {title: '年平均收盘价'}
-      }
-    ]
-  },
-  {
-    path: '/core/goldEvent',
-    component: Layout,
-    redirect: '/core/goldEvent/list',
-    name: 'goldEvent',
-    meta: {title: '事件', icon: 'el-icon-s-marketing'},
-    alwaysShow: true,
-    children: [
-      {
-        path: 'hot',
-        name: 'hotList',
-        component: () => import('@/views/core/goldEvent/hot'),
-        meta: {title: '热词'}
-      },
-      {
-        path: 'note',
-        name: 'noteList',
-        component: () => import('@/views/core/goldEvent/note'),
-        meta: {title: '笔记'}
-      },
 
-    ]
-  },
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]
