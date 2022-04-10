@@ -14,7 +14,7 @@
     <!--    显示更新时间-->
     <span style="float: right;font-size: small;margin-top: 10px;margin-bottom: 10px;">最近更新: {{ refresh_date }}</span>
 
-    <el-button size="mini" style="margin-top: 10px;margin-bottom: 10px" icon="el-icon-download">导出</el-button>
+    <el-button size="mini" style="margin-top: 10px;margin-bottom: 10px" icon="el-icon-download" @click="export_excel">导出</el-button>
 
     <!--    显示所有数据表格-->
     <el-table :data="gold_data_list"
@@ -44,6 +44,7 @@
     </el-pagination>
   </div>
 </template>
+
 
 <script>
   import axios from 'axios'
@@ -92,6 +93,9 @@
       }
       , push_to_month() {
         this.$router.push({path: "GoldMonthlyData"})
+      },
+      export_excel(){
+        window.location.href = 'http://localhost:8110/admin/core/gold/export'
       }
 
     }

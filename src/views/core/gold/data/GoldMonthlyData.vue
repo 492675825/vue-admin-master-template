@@ -1,9 +1,15 @@
 <template>
   <div class='app-container'>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1"><router-link to="/daily_data">日数据</router-link></el-menu-item>
-      <el-menu-item index="2"><router-link to="/monthly_data">月数据</router-link></el-menu-item>
-      <el-menu-item index="3"><router-link to="/yearly_data">年数据</router-link></el-menu-item>
+      <el-menu-item index="1">
+        <router-link to="/daily_data">日数据</router-link>
+      </el-menu-item>
+      <el-menu-item index="2">
+        <router-link to="/monthly_data">月数据</router-link>
+      </el-menu-item>
+      <el-menu-item index="3">
+        <router-link to="/yearly_data">年数据</router-link>
+      </el-menu-item>
     </el-menu>
 
     <!--    显示所有数据表格-->
@@ -12,8 +18,9 @@
               highlight-current-row>
       <el-table-column type="index" width="50" label="编号"/>
       <el-table-column prop="month_number" label="月份"/>
-      <el-table-column prop="sum_number" label="净值"/>
-      <el-table-column prop="average_number" label="月均净值"/>
+      <el-table-column prop="current_sum_mapping" label="今年净值"/>
+      <el-table-column prop="history_average_mapping" label="历史年均净值(总月净值/总年数)"/>
+      <el-table-column prop="history_sum_mapping" label="历史总净值"/>
     </el-table>
 
   </div>
@@ -29,7 +36,9 @@
         currentPage: 1,
         total: 1,
         pageSize: 10,
-        refresh_date: "2022-03-30 10:00:00"
+        refresh_date: "2022-03-30 10:00:00",
+        current_year: "2022"
+
       }
     },
     created() {

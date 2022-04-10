@@ -14,7 +14,6 @@
       <el-table-column type="index" width="50" label="编号"/>
       <el-table-column prop="year_number" label="年份"/>
       <el-table-column prop="totalCount" label="净值"/>
-      <el-table-column prop="averageCount" label="年均净值"/>
     </el-table>
 
   </div>

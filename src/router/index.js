@@ -199,6 +199,22 @@ export const asyncRoutes = [
       },
     ]
   },
+  {
+    path: '/core/gold/chart',
+    component: Layout,
+    redirect: '/core/gold/chart',
+    name: 'GoldDataChart',
+    meta: {title: '图表', icon: 'el-icon-s-marketing'},
+    alwaysShow: true,
+    children: [
+      {
+        path: '/gold_chart',
+        name: 'goldDataChartList',
+        component: () => import('@/views/core/gold/chart/GoldChart'),
+        meta: {title: '黄金价格'}
+      }
+    ]
+  },
 
 
   // 404 page must be placed at the end !!!
