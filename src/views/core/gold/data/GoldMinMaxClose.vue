@@ -13,8 +13,13 @@
               highlight-current-row
               height="600">
       <el-table-column type="index" width="50" label="编号"/>
-      <el-table-column prop="year_number" label="年份"/>
-      <el-table-column prop="totalCount" label="净值"/>
+      <el-table-column prop="yearNumber" label="年份"/>
+      <el-table-column prop="minClose" label="最低收盘价"/>
+      <el-table-column prop="minCloseVersionDate" label="最低收盘价日期"/>
+      <el-table-column prop="minCloseMonth" label="最高收盘所在月"/>
+      <el-table-column prop="maxClose" label="最高收盘价"/>
+      <el-table-column prop="maxCloseVersionDate" label="最高收盘价日期"/>
+      <el-table-column prop="maxCloseMonth" label="最高收盘价所在月"/>
     </el-table>
 
   </div>
@@ -41,7 +46,7 @@
       dataList() {
         axios({
           method: 'get',
-          url: `http://localhost:8110/admin/core/gold/yearly_data`,
+          url: `http://localhost:8110/admin/core/gold/minMaxClose`,
         }).then(response => {
           this.gold_data_list = response.data.data
 

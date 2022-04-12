@@ -1,11 +1,6 @@
 <template>
   <div class='app-container'>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1"><router-link to="/daily_data"><b>日数据</b></router-link></el-menu-item>
-      <el-menu-item index="2"><router-link to="/monthly_data"><b>月数据</b></router-link></el-menu-item>
-      <el-menu-item index="3"><router-link to="/yearly_data"><b>年数据</b></router-link></el-menu-item>
-      <el-menu-item index="3"><router-link to="/min_max_close"><b>收盘价</b></router-link></el-menu-item>
-    </el-menu>
+
     <!--    显示更新时间-->
     <span style="float: right;font-size: small;margin-top: 10px;margin-bottom: 10px;">最近更新: {{ refresh_date }}</span>
 
@@ -17,14 +12,10 @@
               :default-sort="{prop: 'version_date', order: 'descending'}"
               highlight-current-row>
       <el-table-column type="index" width="50" label="编号"/>
-      <el-table-column prop="versionDate" label="交易日期"/>
-      <el-table-column prop="item" label="产品类别"/>
-      <el-table-column prop="open" label="开盘价"/>
-      <el-table-column prop="high" label="最高价"/>
-      <el-table-column prop="low" label="最低价"/>
-      <el-table-column prop="close" label="收盘价"/>
-      <el-table-column prop="upOrDown" label="涨幅"/>
-      <el-table-column prop="mapping" label="标记"/>
+      <el-table-column prop="versionDate" label="公布日期"/>
+      <el-table-column prop="currentValue" label="今值(万人)"/>
+      <el-table-column prop="predictValue" label="预测值(万人)"/>
+      <el-table-column prop="previousValue" label="前值(万人)"/>
     </el-table>
 
     <!--    分页-->
@@ -62,7 +53,7 @@
       getPage() {
         axios({
           method: 'post',
-          url: `http://localhost:8110/admin/core/gold/getPage`,
+          url: `http://localhost:8110/admin/core/nonfarm/data`,
           params: {
             currentPage: this.currentPage,
             pageSize: this.pageSize
@@ -85,12 +76,10 @@
       handleCurrentChange(currentPage) {
         this.currentPage = currentPage
         this.getPage()
-      }
-      , push_to_month() {
-        this.$router.push({path: "GoldMonthlyData"})
       },
+
       export_excel(){
-        window.location.href = 'http://localhost:8110/admin/core/gold/export'
+        window.location.href = 'http://localhost:8110/admin/core/nonfarm/export'
       }
 
     }

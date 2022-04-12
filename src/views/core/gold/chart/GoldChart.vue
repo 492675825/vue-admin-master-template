@@ -61,7 +61,15 @@
     <el-row :gutter="10">
       <el-col :span="24">
         <el-card shadow="always">
-          <div id="line" style="width:100%;height: 300px"></div>
+          <div id="line" style="width:100%;height: 300px; margin-bottom: 40px"></div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <el-card shadow="always">
+          <div id="bar" style="width:100%;height: 300px;margin-bottom: 40px"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -85,8 +93,12 @@
         up_down: 0.00,
         mapping: 0,
         line_version_date: [],
-        line_current_mapping:[],
-        line_history_avg_mapping:[]
+        line_current_mapping: [],
+        line_history_avg_mapping: [],
+        bar_year_number: [],
+        bar_max_earning_rate: [],
+        bat_average_earning_rate: [],
+
 
       }
     },
@@ -96,6 +108,7 @@
     },
     mounted() {
       this.line_data()
+      this.bar_data()
     },
     components: {
       CountTo
@@ -131,12 +144,12 @@
           }
           this.line_version_date = version_date_list
           let current_sum_mapping_list = []
-          for(let i = 0; i<this.line_data_list.length;i++){
+          for (let i = 0; i < this.line_data_list.length; i++) {
             current_sum_mapping_list.push(this.line_data_list[i].currentSumMapping)
           }
           this.line_current_mapping = current_sum_mapping_list
           let his_avg_sum_mapping_list = []
-          for(let i=0;i<this.line_data_list.length;i++){
+          for (let i = 0; i < this.line_data_list.length; i++) {
             his_avg_sum_mapping_list.push(this.line_data_list[i].historyAverageMapping)
           }
           this.line_history_avg_mapping = his_avg_sum_mapping_list
@@ -157,15 +170,15 @@
               trigger: 'item'
               // show:true
             },
-            legend:{
-              orient:"horizontal"
+            legend: {
+              orient: "horizontal"
             },
-            toolbox:{
+            toolbox: {
 
               orient: "horizontal",
-              x:"right",
-              y:"top",
-              color : ['#1e90ff','#22bb22','#4b0082','#d2691e'],
+              x: "right",
+              y: "top",
+              color: ['#1e90ff', '#22bb22', '#4b0082', '#d2691e'],
 
             },
             xAxis: {
@@ -193,6 +206,74 @@
         }).catch(res => {
           this.$message.error("error")
         })
+      },
+      bar_data() {
+        axios({
+          url: "http://localhost:8110/admin/core/gold/charts/bar",
+          method: "get"
+        }).then(res => {
+          const bar_list = res.data.data
+          for (let i = 0; i < bar_list.length; i++) {
+           this.bar_year_number.push(bar_list[i].yearNumber)
+          }
+          for(let i = 0;i <bar_list.length;i=i+1){
+            this.bar_max_earning_rate.push(bar_list[i].maxEarningRate.toFixed(4))  //toFixed保留小数点后几位
+          }
+          for(let i = 0;i <bar_list.length;i=i+1){
+            this.bat_average_earning_rate.push(bar_list[i].averageEarningRate.toFixed(4))
+          }
+
+          var myChart = this.$echarts.init(
+            document.getElementById('bar'), 'macarons'
+          );
+          var option = {
+            title: {
+              text: "最大收益率",
+              x: 'left',
+              y: 'top'
+            },
+            tooltip: {
+              backgroundColor: "rgba(0,0,0,0)",
+              trigger: 'item'
+              // show:true
+            },
+            legend: {
+              orient: "horizontal"
+            },
+            toolbox: {
+
+              orient: "horizontal",
+              x: "right",
+              y: "top",
+              color: ['#1e90ff', '#22bb22', '#4b0082', '#d2691e'],
+
+            },
+            xAxis: {
+              data: this.bar_year_number,
+              axisLabel: {
+                interval: 0
+              }
+            },
+
+            yAxis: {},
+            series: [
+              {
+                name: "最大收益率",
+                type: 'bar',
+                data: this.bar_max_earning_rate
+              },
+              {
+                name: "历史年平均最大收益率",
+                type: 'line',
+                data: this.bat_average_earning_rate
+              },
+            ]
+          };
+          myChart.setOption(option)
+        }).catch(res => {
+          this.$message.error("error")
+        })
+
       }
     }
   }

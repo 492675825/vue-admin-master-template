@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import fa from "element-ui/src/locale/lang/fa";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -197,6 +198,20 @@ export const asyncRoutes = [
         meta: {title: '黄金年报'},
         hidden:true
       },
+      {
+        path: '/min_max_close',
+        name: 'goldMinMaxClose',
+        component: () => import('@/views/core/gold/data/GoldMinMaxClose'),
+        meta: {title: '黄金收盘价'},
+        hidden:true
+      },
+      {
+        path: '/nonfarm_data',
+        name: 'nonfarmData',
+        component: () => import('@/views/core/nonfarm/non_farm_data'),
+        meta: {title: '非农数据'},
+        hidden:false
+      },
     ]
   },
   {
@@ -212,6 +227,22 @@ export const asyncRoutes = [
         name: 'goldDataChartList',
         component: () => import('@/views/core/gold/chart/GoldChart'),
         meta: {title: '黄金价格'}
+      }
+    ]
+  },
+  {
+    path: '/core/news',
+    component: Layout,
+    redirect: '/core/news',
+    name: 'news',
+    meta: {title: '新闻', icon: 'el-icon-s-marketing'},
+    alwaysShow: true,
+    children: [
+      {
+        path: '/news_list',
+        name: 'news_daily_list',
+        component: () => import('@/views/core/news/news_list'),
+        meta: {title: '每日新闻'}
       }
     ]
   },

@@ -1,15 +1,10 @@
 <template>
   <div class='app-container'>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">
-        <router-link to="/daily_data">日数据</router-link>
-      </el-menu-item>
-      <el-menu-item index="2">
-        <router-link to="/monthly_data">月数据</router-link>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <router-link to="/yearly_data">年数据</router-link>
-      </el-menu-item>
+      <el-menu-item index="1"><router-link to="/daily_data"><b>日数据</b></router-link></el-menu-item>
+      <el-menu-item index="2"><router-link to="/monthly_data"><b>月数据</b></router-link></el-menu-item>
+      <el-menu-item index="3"><router-link to="/yearly_data"><b>年数据</b></router-link></el-menu-item>
+      <el-menu-item index="3"><router-link to="/min_max_close"><b>收盘价</b></router-link></el-menu-item>
     </el-menu>
 
     <!--    显示所有数据表格-->
