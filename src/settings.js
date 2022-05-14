@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Python量化金融',
+  title: '量化金融工具',
 
   /**
    * @type {boolean} true | false

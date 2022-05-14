@@ -4,11 +4,26 @@
     <!--    显示更新时间-->
     <span style="float: right;font-size: small;margin-top: 10px;margin-bottom: 10px;">最近更新: {{ refresh_date }}</span>
 
-    <el-button size="mini" style="margin-top: 10px;margin-bottom: 10px" icon="el-icon-download" @click="export_excel">
+
+    <!--    选择新闻大类-->
+
+    <el-button size="mini" style="margin-top: 10px;margin-bottom: 10px" icon="el-icon-download"
+               @click="export_excel">
       导出
     </el-button>
+    <label style="color:#909399;font-size: 14px;margin-left: 10px;margin-right: 5px">新闻</label>
+    <el-select v-model="news_option_values" clearable placeholder="请选择" size="mini"
+               style="width: 100px;margin-right: 10px">
+      <el-option
+        v-for="item in news_type_options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
 
-
+    <!--  选择日期-->
+    <label style="color:#909399;font-size: 14px;margin-left: 10px;margin-right: 5px">日期</label>
     <el-date-picker
       v-model="select_date_value"
       align="right"
@@ -16,13 +31,19 @@
       value-format="yyyy-MM-dd"
       placeholder="选择日期"
       size="mini"
-      style="margin-left: 10px"
+      style="width: 150px;margin-right: 10px"
       :picker-options="pickerOptions">
     </el-date-picker>
+
 
     <el-button type="primary" size="mini" style="margin-top: 10px;margin-bottom: 10px;margin-left: 10px"
                icon="el-icon-position" @click="filter_news_by_date">
       前往
+    </el-button>
+
+    <el-button type="normal" size="mini" style="margin-top: 10px;margin-bottom: 10px;margin-left: 10px"
+               @click="reset_data">
+      重置
     </el-button>
 
 
@@ -50,7 +71,7 @@
 
     <!--    显示日期筛选的数据-->
 
-    <el-table :data="news_data_list_by_date"
+    <el-table :data="filter_news_data_list"
               border stripe
               :default-sort="{prop: 'versionDate', order: 'descending'}"
               highlight-current-row
@@ -87,11 +108,14 @@
 <script>
   import axios from 'axios'
 
+
   export default {
+    inject: ['reload'],
     data() {
       return {
         news_data_list: [],
-        news_data_list_by_date: [],
+        filter_news_data_list: [],
+        news_option_values: "",
         currentPage: 1,
         total: 1,
         pageSize: 10,
@@ -125,6 +149,20 @@
             }
           }]
         },
+        news_type_options: [{
+          value: 'world',
+          label: 'world'
+        }, {
+          value: 'china',
+          label: 'china'
+        }, {
+          value: 'economy',
+          label: 'economy'
+        }, {
+          value: 'All',
+          label: 'All'
+        }
+        ]
       }
     },
     created() {
@@ -166,17 +204,47 @@
       },
       filter_news_by_date() {
 
-        if (this.select_date_value === "") {
+        if (this.select_date_value === "" && this.news_option_values === "") {
           this.$message.info("请输入日期")
-        } else {
+        } else if (this.news_option_values === "" && this.select_date_value != "") {
           axios({
             url: "http://localhost:8110/admin/core/news/filter_by_date",
             method: "post",
             params: {
               select_date: this.select_date_value
+
             }
           }).then(res => {
-            this.news_data_list_by_date = res.data.data
+            this.filter_news_data_list = res.data.data
+            this.show_select_count = true
+            this.show_total_count = false
+          }).catch(res => [
+            this.$message.error("error")
+          ])
+        } else if (this.news_option_values != "" && this.select_date_value === "") {
+          axios({
+            url: "http://localhost:8110/admin/core/news/filter_by_news_type",
+            method: "post",
+            params: {
+              select_type: this.news_option_values
+            }
+          }).then(res => {
+            this.filter_news_data_list = res.data.data
+            this.show_select_count = true
+            this.show_total_count = false
+          }).catch(res => [
+            this.$message.error("error")
+          ])
+        } else if (this.news_option_values != "" && this.select_date_value != "") {
+          axios({
+            url: "http://localhost:8110/admin/core/news/filter_by_date_and_type",
+            method: "post",
+            params: {
+              select_type: this.news_option_values,
+              select_date: this.select_date_value
+            }
+          }).then(res => {
+            this.filter_news_data_list = res.data.data
             this.show_select_count = true
             this.show_total_count = false
           }).catch(res => [
@@ -184,6 +252,9 @@
           ])
         }
 
+      },
+      reset_data() {
+        this.reload()
       }
     }
 
